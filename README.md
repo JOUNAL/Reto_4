@@ -13,8 +13,11 @@ Veremos como se los metodos de la clase punto, que seria reiniciarlo (ponerlo de
 ### Clase Linea 
 Veremos como se los metodos de la clase linea, en este caso: calcular la pendiente, calcular la longitud de la linea (utlizando el teorema de pitagoras), si intersecta con el eje x y donde intersecta y si intersecta con el eje y donde intersecta
 
-### Clase figuar
+### Clase figura
+La clase figura tiene los siguientes atributos: vertices (como variable tipo lista); aristas (como variable tipo lista); angulos internos (como variable tipo lista); y los metodos: calcular area; calcular perimetro y calcular angulos internos; todo esto se puede ver heredado a las clases triangulo y rectangulo; para la funcion de calcular perimetro como todos las figuras se calculan igual, simplemente se establece en la clase de figura y se llamara desde la figura que sea necesario
 
+### Clase rectangulo
+Lo importante a mencionar aqui es que ya tiene por defecto la lista de angulos internos, que serian todos de 90°, ya que un rectangulo siempre tendra esos angulos internos, y ya que cuadrado hereda de rectangulo, va pasar lo mismo para este; para la funcion de calcular el area, como es igual para el rectangulo y cuadrado, simplemente se establece en rectangulo
 ```python
 import math
 
