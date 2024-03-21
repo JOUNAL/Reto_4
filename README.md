@@ -3,17 +3,22 @@
 
 
 
-## Reto 3.1
+## Reto 4.1
 
-En este caso, el codigo contedra la definicion de la clase linea, punto rectangulo y cuadrado (siendo esta una subclase de rectangulo)
+Para este reto se utilizaron varias de las mismas clases, excepto que ahora rectangulo hereda de una clase mayor, siendo esta ultima figura, y se le añaden otra subclase mas a figura, siendo esta triangulo, y triangulo tiene varias subclases, siendo estas las clases que pueden existir
 
 ### Clase Punto
 Veremos como se los metodos de la clase punto, que seria reiniciarlo (ponerlo de nuevo en 0,0), moverlo (cambiarle las coordenadas a un nuevo x,y), y calcular la distancia entre dos puntos propuestos
 
 ### Clase Linea 
 Veremos como se los metodos de la clase linea, en este caso: calcular la pendiente, calcular la longitud de la linea (utlizando el teorema de pitagoras), si intersecta con el eje x y donde intersecta y si intersecta con el eje y donde intersecta
-Para
+
+### Clase figuar
+
 ```python
+import math
+
+
 class Point:
     def __init__(self, x: float=0, y: float=0):
         self.x = x
@@ -28,170 +33,169 @@ class Point:
         distance = ((self.x - point.x)**2+(self.y - point.y)**2)**(0.5)
         return distance
 
-first_point = Point(x=1, y=1)
-second_point = Point(x=2, y=2)
-print(first_point.compute_distance(second_point))
+first_point = Point(x=1, y=2)
+second_point = Point(x=2, y=3)
+
+
 
 class Line:
 
-    def __init__(self,startx,starty,endx,endy):
-        self.startx=startx
-        self.starty=starty
-        self.endx=endx
-        self.endy=endy
+    def __init__(self,startp,endp):
+        self.startp=startp
+        self.endp=endp
+
     def compute_lenght(self):
-        self.lenght=(((self.endy-self.starty))**2+((self.endx-self.startx)**2))**0.5
-        print("La longitud de la linea es de:" + str(self.lenght))
+        self.lenght=(((self.endp.y-self.startp.y))**2+((self.endp.x-self.startp.x)**2))**0.5
+        return self.lenght
     def compute_slope(self):
-        self.slope=(self.endy-self.starty)/(self.endx-self.startx)
-        print("La pendiente de la linea es de:" + str(self.slope))
+        if self.startp.x!=self.endp.x:
+            self.slope=(self.endp.y-self.startp.y)/(self.endp.x-self.startp.x)
+        else:
+            self.slope=0
+        return self.slope
+    def compute_degree(self):
+        if self.startp.x!=self.endp.x:
+            self.degree=math.degrees(math.atan2((self.endp.y-self.startp.y),(self.endp.x-self.startp.x)))
+        else:
+            self.degree=0
+        return self.degree
+    
     def compute_vertical_cross(self):
-        self.intersecty=self.starty-(self.slope*self.startx)
-        if self.intersecty>self.startx and self.intersecty<self.endx:
-            print(self.intersecty)
+        self.intersecty=self.startp.y-(self.slope*self.startp.x)
+        if self.startp.x<=0<=self.endp.x:
+            return self.intersecty
         else:
-            print("No intersecta con el eje y")
+            return "Noy"
+
     def compute_horizontal_cross(self):
-        self.intersectx=(self.starty*0-self.intersecty)/self.slope
-        if self.intersectx>self.startx and self.intersectx<self.endx:
-            print(self.intersectx)
+        if self.startp.x!=self.endp.x:
+            self.intersectx=(self.startp.y*0-self.intersecty)/self.slope
+
         else:
-            print("No intersecta con el eje x")
+            self.intersectx=self.startp.x
 
-Linea0=Line(startx=2,starty=0,endx=5,endy=9)
-Linea1=Line(startx=2,starty=2,endx=2,endy=12)
-Linea2=Line(startx=2,starty=12,endx=22,endy=12)
-Linea3=Line(startx=22,starty=12,endx=22,endy=2)
-Linea4=Line(startx=22,starty=2,endx=2,endy=2)
-Linea0.compute_lenght()
-Linea0.compute_slope()
-Linea0.compute_vertical_cross()
-Linea0.compute_horizontal_cross()
+        if self.startp.y<=0<=self.endp.y:
+            return self.intersectx
+        else:
+            return "Nox"
 
-class Rectangulo:
-    def __init__(self,metodo,x=0,y=0,width=0,height=0,x1=0,y1=0,Lineo1=0,Lineo2=0,Lineo3=0,Lineo4=0):
-        self.metodo=metodo
-        match metodo:
-            case 1:
-                self.x=x
-                self.y=y
-                self.width=width
-                self.height=height
-            case 2:
-                self.x=(x-((width)/2))
-                self.y=(y-((height)/2))
-                self.width=width
-                self.height=height
-            case 3:
-                self.x=x
-                self.y=y
-                self.width=abs(x-x1)
-                self.height=abs(y-y1)
-                a=0
-                b=0
-                if self.x>x1:
-                    a=0+self.x
-                    self.x=0+x1
-                    x1=a
-                if self.y>y1:
-                    b=0+self.y
-                    self.y=0+y1
-                    y1=b
-            case 4:
-                self.x=Lineo1.startx
-                self.y=Lineo1.starty
+Linea0=Line(startp=first_point,endp=second_point)
+print("La longitud de la linea es: " + str(Linea0.compute_lenght()))
+print("La pendiente de la linea es: " + str(Linea0.compute_slope()) + ", y eso con un angulo de: " + str(Linea0.compute_degree()) + "°")
+print(Linea0.compute_vertical_cross())
+print(Linea0.compute_horizontal_cross())
 
+class Shape:
+    def __init__(self,edges,vertices):
+        self.edges=edges
+        self.vertices=vertices
 
-                if self.x>Lineo2.startx:
-                    self.x=Lineo2.startx
-                    self.y=Lineo2.starty
-                elif self.x>Lineo3.startx:
-                    self.x=Lineo3.startx
-                    self.y=Lineo3.starty
-                elif self.x>Lineo4.startx:
-                    self.x=Lineo4.startx
-                    self.y=Lineo4.starty
-
-                if Lineo1.startx==Lineo1.endx:
-                    self.height=abs(Lineo1.starty-Lineo1.endy)
-                elif Lineo1.starty==Lineo1.endy:
-                    self.width=abs(Lineo1.startx-Lineo1.endx)
-
-                if Lineo2.startx==Lineo2.endx:
-                    self.height=abs(Lineo2.starty-Lineo2.endy)
-                elif Lineo2.starty==Lineo2.endy:
-                    self.width=abs(Lineo2.startx-Lineo2.endx) 
-
-                if Lineo3.startx==Lineo3.endx:
-                    self.height=abs(Lineo3.starty-Lineo3.endy)
-                elif Lineo3.starty==Lineo3.endy:
-                    self.width=abs(Lineo3.startx-Lineo3.endx)   
-
-                if Lineo4.startx==Lineo4.endx:
-                    self.height=abs(Lineo4.starty-Lineo4.endy)
-                elif Lineo4.starty==Lineo4.endy:
-                    self.width=abs(Lineo4.startx-Lineo4.endx)                
-
-
-                
     def compute_area(self):
-        return self.height*self.width
+        raise NotImplementedError("Subclases deben implementar calcular area()")
+    
     def compute_perimeter(self):
-        return(self.height*2)+(self.width*2) 
-    def compute_interference_point(self,pointx,pointy):
-        if  self.x<pointx<(self.x+self.width) and self.y<pointy<(self.y+self.height):
-            return 1
-        else:
-            return 0
-                
-class Cuadrado(Rectangulo):
-    def __init__(self,metodo,x=0,y=0,height=0,x1=0,y1=0):
-        self.metodo=metodo
-        match metodo:
-            case 1:
-                self.x=x
-                self.y=y
-                self.height=height
-                self.width=height
-            case 2:
-                self.x=(x-((height)/2))
-                self.y=(y-((height)/2))
-                self.height=height
-                self.width=height
-            case 3:
-                self.x=x
-                self.y=y
-                self.width=abs(x-x1)
-                self.height=abs(y-y1)
-                a=0
-                b=0
-                if self.x>x1:
-                    a=self.x
-                    self.x=x1
-                    x1=a
-                if self.y>y1:
-                    b=self.y
-                    self.y=y1
-                    y1=b
+        a=0
+        for const in range(len(self.edges)):
+            a+=(self.edges[const]).compute_lenght()
+        self.perimeter=a
+        return self.perimeter
+    
+    def compute_inner_angles(self):
+        raise NotImplementedError("Subclases deben implementar calcular angulos internos()")
+    
+class Triangle(Shape):
+    def __init__(self,edges,vertices):
+        super().__init__(edges,vertices)
+
+    def compute_area(self):
+        a=0
+        for const in range(len(self.edges)):
+            a+=(self.edges[const]).compute_lenght()
+        self.perimeter=a
+        s=(self.perimeter)/2
+        self.area=math.sqrt(s*(s-((self.edges[0]).compute_lenght()))*(s-((self.edges[1]).compute_lenght()))*(s-((self.edges[2]).compute_lenght())))
+        return self.area
+
+    def compute_inner_angles(self):
+        raise NotImplementedError("Subclases deben implementar calcular angulos internos()")
+
+class Iscoceles(Triangle):
+    def __init__(self,edges,vertices):
+        super().__init__(edges,vertices)
+
+    def compute_inner_angles(self):
+        raise NotImplementedError("Subclases deben implementar calcular angulos internos()")
+
+class Equilateral(Triangle):
+    def __init__(self,edges,vertices):
+        super().__init__(edges,vertices)
+        self.inner_angles=[60]*3
+
+class Scalene(Triangle):
+    def __init__(self,edges,vertices):
+        super().__init__(edges,vertices)
+
+    def compute_inner_angles(self):
+        raise NotImplementedError("Subclases deben implementar calcular angulos internos()")
+
+class Rectangle(Triangle):
+    def __init__(self,edges,vertices):
+        super().__init__(edges,vertices)
 
 
-Rectangulo1=Rectangulo(metodo=1,x=2,y=2,height=10,width=20)
-Rectangulo2=Rectangulo(metodo=3,x=2,y=2,x1=0,y1=0)
-Cuadrado1=Cuadrado(metodo=1,x=2,y=2,height=3)
-Cuadrado2=Cuadrado(metodo=3,x=2,y=2,x1=-1,y1=-1)
-print("El area del rectangulo es de:" + str(Rectangulo1.compute_area()) + "cm^2")
-print("El perimetro del rectangulo es de:" + str(Rectangulo1.compute_perimeter()) + "cm")
-print("El area del rectangulo es de:" + str(Rectangulo2.compute_area()) + "cm^2")
-print("El perimetro del rectangulo es de:" + str(Rectangulo2.compute_perimeter()) + "cm")
-print("El area del perimetro es de:" + str(Cuadrado1.compute_area()) + "cm^2")
-print("El perimetro del cuadrado es de:" + str(Cuadrado1.compute_perimeter()) + "cm")
-if Cuadrado2.compute_interference_point(pointx=0,pointy=0)==0:
-    print("El punto esta fuera del cuadrado")
-else:
-    print("El punto esta dentro del cuadrado")
+    def compute_inner_angles(self):
+        raise NotImplementedError("Subclases deben implementar calcular angulos internos()")
 
-Rectangulo3=Rectangulo(metodo=4,Lineo1=Linea1,Lineo2=Linea2,Lineo3=Linea3,Lineo4=Linea4)
-print(Rectangulo3.compute_area())
+class Rectangle(Shape):
+    def __init__(self,edges,vertices):
+        super().__init__(edges,vertices)
+        self.inner_angles=([90]*4)
+
+    def compute_area(self):
+        a=1
+        for const in range(len(self.edges)):
+            a*=(self.edges[const]).compute_lenght()
+        self.area=math.sqrt(a)
+        return self.area
+
+class Square(Rectangle):
+    def __init__(self,edges,vertices):
+        super().__init__(edges,vertices)
+        self.inner_angles=([90]*4)
+
+
+tp1=Point(x=1,y=2)
+tp2=Point(x=3,y=5)
+tp3=Point(x=5,y=2)
+
+tL1=Line(startp=tp1,endp=tp2)
+tL2=Line(startp=tp2,endp=tp3)
+tL3=Line(startp=tp3,endp=tp1)
+
+tedges1=[tL1,tL2,tL3]
+tvertices1=[tp1,tp2,tp3]
+
+triangulo1=Iscoceles(edges=tedges1,vertices=tvertices1)
+
+rp1=Point(x=7,y=2)
+rp2=Point(x=7,y=5)
+rp3=Point(x=12,y=5)
+rp4=Point(x=12,y=2)
+
+rL1=Line(startp=rp1,endp=rp2)
+rL2=Line(startp=rp2,endp=rp3)
+rL3=Line(startp=rp3,endp=rp4)
+rL4=Line(startp=rp4,endp=rp1)
+
+redges1=[rL1,rL2,rL3,rL4]
+rvertives1=[rp1,rp2,rp3,rp4]
+
+rectangulo1=Rectangle(edges=redges1,vertices=rvertives1)
+
+print(triangulo1.compute_perimeter())
+print(triangulo1.compute_area())
+print(rectangulo1.compute_area())
+print(rectangulo1.compute_perimeter())
 ```
 
 
