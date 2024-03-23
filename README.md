@@ -18,7 +18,12 @@ La clase figura tiene los siguientes atributos: vertices (como variable tipo lis
 
 ### Clase rectangulo
 Lo importante a mencionar aqui es que ya tiene por defecto la lista de angulos internos, que serian todos de 90°, ya que un rectangulo siempre tendra esos angulos internos, y ya que cuadrado hereda de rectangulo, va pasar lo mismo para este; para la funcion de calcular el area, como es igual para el rectangulo y cuadrado, simplemente se establece en rectangulo
+### Clase triangulo
+Lo importante para esta clase es encontrar los angulos y el area, para calcular el area se utiliza el teorema de Heròn (se basa en escribir la formula de un triangulo de una manera que se calcule sin necesidad de encontrar ningun angulo, se halla reescribiendo el area de el triangulo), y para los angulos del triangulo se utiliza el Teorema del coseno, despejando el angulo, dandonos asi el angulo que se tiene enfrente de la linea a la que se le esta hallando principalmente el angulo 
 ```python
+import math
+
+
 import math
 
 
@@ -68,7 +73,7 @@ class Line:
         if self.startp.x<=0<=self.endp.x:
             return self.intersecty
         else:
-            return "Noy"
+            return False
 
     def compute_horizontal_cross(self):
         if self.startp.x!=self.endp.x:
@@ -80,13 +85,22 @@ class Line:
         if self.startp.y<=0<=self.endp.y:
             return self.intersectx
         else:
-            return "Nox"
+            return False
 
 Linea0=Line(startp=first_point,endp=second_point)
 print("La longitud de la linea es: " + str(Linea0.compute_lenght()))
 print("La pendiente de la linea es: " + str(Linea0.compute_slope()) + ", y eso con un angulo de: " + str(Linea0.compute_degree()) + "°")
-print(Linea0.compute_vertical_cross())
-print(Linea0.compute_horizontal_cross())
+
+if (Linea0.compute_vertical_cross())== False:
+    print("La linea no corta el eje Y")
+else:
+    print("La linea corta en Y en:" + str(Linea0.compute_vertical_cross))
+
+if (Linea0.compute_horizontal_cross())== False:
+    print("La linea no corta el eje X")
+else:
+    print("La linea corta en X en:" + str(Linea0.compute_vertical_cross))
+
 
 class Shape:
     def __init__(self,edges,vertices):
@@ -106,6 +120,25 @@ class Shape:
     def compute_inner_angles(self):
         raise NotImplementedError("Subclases deben implementar calcular angulos internos()")
     
+    def set_vertices(self, vertices):
+        self.vertices=vertices
+    
+    def get_vertices(self):
+        return self.vertices
+    
+    def set_edges(self, edges):
+        self.edges=edges
+    
+    def get_edges(self):
+        return self.edges
+    
+    def get_perimeter(self):
+        return self.perimeter
+    
+    def get_inner_angles(self):
+        return self.inner_angles
+
+    
 class Triangle(Shape):
     def __init__(self,edges,vertices):
         super().__init__(edges,vertices)
@@ -120,14 +153,19 @@ class Triangle(Shape):
         return self.area
 
     def compute_inner_angles(self):
-        raise NotImplementedError("Subclases deben implementar calcular angulos internos()")
+        a = self.edges[0].compute_lenght()
+        b = self.edges[1].compute_lenght()
+        c = self.edges[2].compute_lenght()
+        angle_alpha = math.degrees(math.acos((b**2 + c**2 - a**2) / (2 * b * c)))
+        angle_beta = math.degrees(math.acos((a**2 + c**2 - b**2) / (2 * a * c)))
+        angle_gamma = math.degrees(math.acos((a**2 + b**2 - c**2) / (2 * a * b)))
+        self.inner_angles = [angle_alpha, angle_beta, angle_gamma]
+        return self.inner_angles
 
 class Iscoceles(Triangle):
     def __init__(self,edges,vertices):
         super().__init__(edges,vertices)
 
-    def compute_inner_angles(self):
-        raise NotImplementedError("Subclases deben implementar calcular angulos internos()")
 
 class Equilateral(Triangle):
     def __init__(self,edges,vertices):
@@ -138,16 +176,9 @@ class Scalene(Triangle):
     def __init__(self,edges,vertices):
         super().__init__(edges,vertices)
 
-    def compute_inner_angles(self):
-        raise NotImplementedError("Subclases deben implementar calcular angulos internos()")
-
 class Rectangle(Triangle):
     def __init__(self,edges,vertices):
         super().__init__(edges,vertices)
-
-
-    def compute_inner_angles(self):
-        raise NotImplementedError("Subclases deben implementar calcular angulos internos()")
 
 class Rectangle(Shape):
     def __init__(self,edges,vertices):
@@ -179,6 +210,8 @@ tedges1=[tL1,tL2,tL3]
 tvertices1=[tp1,tp2,tp3]
 
 triangulo1=Iscoceles(edges=tedges1,vertices=tvertices1)
+print("Los angulos internos del triangulo son:" + str(triangulo1.compute_inner_angles()))
+
 
 rp1=Point(x=7,y=2)
 rp2=Point(x=7,y=5)
@@ -195,10 +228,10 @@ rvertives1=[rp1,rp2,rp3,rp4]
 
 rectangulo1=Rectangle(edges=redges1,vertices=rvertives1)
 
-print(triangulo1.compute_perimeter())
-print(triangulo1.compute_area())
-print(rectangulo1.compute_area())
-print(rectangulo1.compute_perimeter())
+print("El perimetro del triangulo es de:" + str(triangulo1.compute_perimeter()))
+print("El area del triangulo es de:" + str(triangulo1.compute_area()))
+print("El area del rectangulo es de:" + str(rectangulo1.compute_area()))
+print("El perimetro del rectangulo es de:" + str(rectangulo1.compute_perimeter()))
 ```
 
 
