@@ -235,8 +235,8 @@ print("El perimetro del rectangulo es de:" + str(rectangulo1.compute_perimeter()
 ```
 
 
-
-# Visitando de nuevo
+## Reto 4.2
+### Visitando de nuevo
 
 En este caso, el restaurante que visitamos por fin implemento la opcion de pago, asi que ya no nos debemos endeudar con un restaurante, se puede pagar en este caso de dos forma, con tarjeta y con efectivo, al pagar con tarjeta se requiere introducir de nuevo el codigo de seguridad, y mostrara en la terminal los ultimos 4 numeros de la tarjeta y que el pago ha sido realizado exitosamente, y al pagar con efectivo, podra mostrar 2 mensajes, pago realizado y cuanto le dan de cambio, o que el pago no se realizo debido a que le faltaba dinero y le dice cuanto le falta
 Tambien le adicionaron que si compro 2 objetos o mas en el restaurante, y entre ellos iba un plato principal, se le realizara un descuento del 10%
