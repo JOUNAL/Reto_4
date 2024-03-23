@@ -235,23 +235,48 @@ print("El perimetro del rectangulo es de:" + str(rectangulo1.compute_perimeter()
 ```
 
 
-# Restaurante
 
-Ahora nos encontramos en una situacion de un restaurante donde debemos calcular la cuenta de la orden de un cliente
+# Visitando de nuevo
 
-### Diagrama de clases
+En este caso, el restaurante que visitamos por fin implemento la opcion de pago, asi que ya no nos debemos endeudar con un restaurante, se puede pagar en este caso de dos forma, con tarjeta y con efectivo, al pagar con tarjeta se requiere introducir de nuevo el codigo de seguridad, y mostrara en la terminal los ultimos 4 numeros de la tarjeta y que el pago ha sido realizado exitosamente, y al pagar con efectivo, podra mostrar 2 mensajes, pago realizado y cuanto le dan de cambio, o que el pago no se realizo debido a que le faltaba dinero y le dice cuanto le falta
+Tambien le adicionaron que si compro 2 objetos o mas en el restaurante, y entre ellos iba un plato principal, se le realizara un descuento del 10%
 
-Antes de empezar a programar debemos plantear como seria la estructura de lo que vamos a programar y como se relacionan las clases entre ellas, asi obtenemos el siguiente diagrama de clases
 
-Empezamos con la clase orden, que se compone de items del menu; en esta clase se pueden, añadir items, calcular el total de la cuenta y mostrar la cuenta
-
-La siguiente clase, los items del menu, que se compodria de nombre, precio y cantidad, y que puede calcular el sub_total, que seria la cantidad del item por el precio del item
-
-Y luego estan las subclases qye heredan de items del menu, que serian las categorias que podria a llegar un menu, y que cada una tiene sus caracteristicas propias
-![image](https://github.com/JOUNAL/Reto3/blob/main/Reto_3/Diagrama2(1).png)
-
-Y este seria el codigo, con cada una de las clases y subclases definidas, y lo que seria un ejemplo del una orden de un cliente
+Y este seria el codigo, con cada una de las clases y subclases definidas (cada una con los setters y getters correspondientes), y lo que seria un ejemplo de la orden de un cliente
 ```python
+class MethodPay:
+  def __init__(self):
+    pass
+
+  def pay(self):
+    raise NotImplementedError("Subclases deben implementar pagar()")
+
+class Card(MethodPay):
+  def __init__(self, number, cvv):
+    super().__init__()
+    self.number = number
+    self.cvv = cvv
+
+  def pay(self, mount,cvv2):
+    if self.cvv==cvv2:
+        print(f"Pagando {mount} con tarjeta {self.number[-4:]}")
+    else:
+        print("Contraseña incorrecta")
+
+class Cash(MethodPay):
+  def __init__(self, delivered_cash):
+    self.delivered_cash = delivered_cash
+
+  def pay(self, mount):
+    if self.delivered_cash >= mount:
+      print(f"Pago realizado en efectivo. Cambio: {self.delivered_cash - mount}")
+    else:
+      print(f"Fondos insuficientes. Faltan {mount - self.delivered_cash} para completar el pago.")
+
+
+pago1 = Card("1234567890123456", 123)
+pago2 = Cash(50000)
+
 class Order:
     def __init__(self):
         self.list =[]
@@ -260,18 +285,29 @@ class Order:
         self.total = sum([item.subtotal for item in self.list])
         return self.total
 
-    def discount(self, discount):
+    def set_total_price(self):
         self.total = sum([item.subtotal for item in self.list])
-        self.total -= self.total * (discount / 100)
+        self.total -= self.total * self.discount
         return self.total
 
     def add_item(self, item):
         self.list.append(item)
 
     def get_list(self):
+        ([item.name for item in self.list])
         print("Nombre                 Precio")
         for item in self.list:
             print(f"{item.name} x {item.quantity}    {item.price}")
+    def discount_n(self):
+        if len(self.list)>1:
+            for item in self.list:
+                if item.menu_item=="MainDish":
+                    self.discount=0.10
+    def get_discount_n(self):
+        return self.discount
+
+
+
 
 
 class MenuItem:
@@ -280,56 +316,143 @@ class MenuItem:
         self.price = price
         self.quantity = quantity
         self.subtotal= self.price*self.quantity
+    
+    def set_name(self, name):
+        self.name = name
+    def get_name(self):
+        return self.name
+    
+    def set_price(self, price):
+        self.price = price
+    def get_price(self):
+        return self.price
+    
+    def get_quantity(self):
+        return self.quantity
+
+    def get_subtotal(self):
+        return self.subtotal
+
 
 class Juice(MenuItem):
     def __init__(self, name, price,quantity,sugar):
         super().__init__(name, price,quantity)
+        self.menu_item="Juice"
         self.sugar=sugar
+    
+    def set_sugar(self, sugar):
+        self.sugar = sugar
+
+    def get_sugar(self):
+        return self.sugar
 
 class Soup(MenuItem):
     def __init__(self, name, price,quantity,kind):
         super().__init__(name, price,quantity)
+        self.menu_item="Soup"
         self.kind=kind
-        
+    
+    def set_kind(self, kind):
+        self.kind = kind
+
+    def get_kind(self):
+        return self.kind
+     
 class Soda(MenuItem):
     def __init__(self, name, price,quantity,sugar):
         super().__init__(name, price,quantity)
+        self.menu_item="Soda"
         self.sugar=sugar
+
+    def set_sugar(self, sugar):
+        self.sugar = sugar
+
+    def get_sugar(self):
+        return self.sugar
         
 class IceCream(MenuItem):
     def __init__(self, name, price,quantity,kind):
         super().__init__(name, price,quantity)
-        self.sugar=kind
+        self.menu_item="IceCream"
+        self.kind=kind
+
+    def set_kind(self, kind):
+        self.kind = kind
+
+    def get_kind(self):
+        return self.kind
         
 class Beer(MenuItem):
     def __init__(self, name, price,quantity,brand):
         super().__init__(name, price,quantity)
+        self.menu_item="Beer"
         self.brand=brand
+    
+    def set_brand(self, brand):
+        self.brand = brand
+
+    def get_brand(self):
+        return self.brand
         
 class Sandiwch(MenuItem):
     def __init__(self, name, price,quantity,protein):
         super().__init__(name, price,quantity)
+        self.menu_item="Sandiwch"
         self.protein=protein
+    
+    def set_protein(self, protein):
+        self.protein = protein
+
+    def get_protein(self):
+        return self.protein
         
 class MainDish(MenuItem):
     def __init__(self, name, price,quantity,description):
         super().__init__(name, price,quantity)
+        self.menu_item="MainDish"
         self.description=description
+
+    def set_description(self, description):
+        self.description = description
+
+    def get_description(self):
+        return self.description
         
 class Beef(MenuItem):
     def __init__(self, name, price,quantity,grams):
         super().__init__(name, price,quantity)
+        self.menu_item="Beef"
         self.grams=grams
+
+    def set_grams(self, grams):
+        self.grams = grams
+
+    def get_grams(self):
+        return self.grams
         
 class SideDish(MenuItem):
     def __init__(self, name, price,quantity,kind):
         super().__init__(name, price,quantity)
+        self.menu_item="SideDish"
         self.kind=kind
+
+    def set_kind(self, kind):
+        self.kind = kind
+
+    def get_kind(self):
+        return self.kind
         
 class Appetizer(MenuItem):
     def __init__(self, name, price,quantity,kind):
         super().__init__(name, price,quantity)
+        self.menu_item="Appetizer"
         self.kind=kind
+
+    def set_kind(self, kind):
+        self.kind = kind
+
+    def get_kind(self):
+        return self.kind
 
 orden=Order()
 
@@ -338,8 +461,13 @@ orden.add_item(Soup(name="Sancocho de pescado",price=4000,quantity=2,kind="Sanco
 orden.add_item(MainDish(name="Cerdo a la llanera",price=9000,quantity=2,description="Cerdo con salsa de la casa, arroz, patacon y ensalada"))
 orden.add_item(Appetizer(name="Parfait",price=3500,quantity=2,kind="Dulce"))
 
+orden.discount_n()
 print("El precio total de la orden es:" + str(orden.total_price()))
 orden.get_list()
+print("Su descuento seria del:" +str((orden.get_discount_n())*100) + "%")
+
+pago1.pay(mount=orden.set_total_price(),cvv2=123)
+pago2.pay(mount=orden.set_total_price())
 ```
 El resultado de la terminal seria el siguiente
 ```
@@ -349,4 +477,7 @@ Jugo de mango x 3    2000
 Sancocho de pescado x 2    4000
 Cerdo a la llanera x 2    9000
 Parfait x 2    3500
+Su descuento seria del:10.0%
+Pagando 35100.0 con tarjeta 3456
+Pago realizado en efectivo. Cambio: 14900.0
 ```
